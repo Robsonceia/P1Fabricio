@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastrar</h2>
+        <form action="/cadastrar" method="POST">
+            
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+    <script>
+        function loadUsers() {
+            axios.get('/usuarios/')
+                .then(function(response) {
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = '';
+                    response.data.forEach(user => {
+                        const userItem = document.createElement('li');
+                        userItem.textContent = `Nome: ${user.nome}, Email: ${user.email} `;
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Deletar';
+                        deleteButton.style.marginLeft = '10px';
+                        deleteButton.onclick = function() { deleteUser(user._id); };
+                        userItem.appendChild(deleteButton);
+
+                        const updateButton = document.createElement('button');
+                        updateButton.textContent = 'Atualizar';
+                        updateButton.style.marginLeft = '10px';
+                        updateButton.onclick = function() { showUpdateForm(user._id, user.nome, user.email); };
+                        userItem.appendChild(updateButton);
+
+                        userList.appendChild(userItem);
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Erro ao buscar usuários:', error);
+                });
+        }
+
+        function deleteUser(userId) {
+            axios.delete(`/usuarios/${userId}`)
+                .then(function() {
+                    alert('Usuário deletado com sucesso!');
+                    loadUsers();
+                })
+                .catch(function(error) {
+                    alert('Erro ao deletar usuário: ' + error.response.data.message);
+                });
+        }
+
+        let currentUserId = null; 
+
+        function showUpdateForm(userId, nome, email) {
+            currentUserId = userId;
+            document.getElementById('nomeUpdate').value = nome;
+            document.getElementById('emailUpdate').value = email;
+            document.getElementById('updateForm').style.display = 'block';
+        }
+
+        function updateUser(userId) {
+            const nome = document.getElementById('nomeUpdate').value;
+            const email = document.getElementById('emailUpdate').value;
+            const senha = document.getElementById('senhaUpdate').value;
+
+            axios.put(`/usuarios/${userId}`, { nome, email, senha })
+                .then(function(response) {
+                    alert('Usuário atualizado com sucesso!');
+                    document.getElementById('updateForm').style.display = 'none';
+                    loadUsers(); 
+                })
+                .catch(function(error) {
+                    alert('Erro ao atualizar usuário: ' + error.response.data.message);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+</body>
+</html>
