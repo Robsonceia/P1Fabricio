@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, jsonify
+from pymongo import MongoClient
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mongodb://rco90rc:<password>@cluster0.lpndyo9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-db = SQLAlchemy(app)
+client = MongoClient('mongodb://localhost:27017/')
+db = client['Projeto2']
+colecao = db['rco90rc']
 
 from models.user import User
 
