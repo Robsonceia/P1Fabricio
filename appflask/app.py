@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from pymongo import MongoClient
 
 app = Flask(__name__)
-client = MongoClient('mongodb+srv://rco90rc:1234@cluster0.lpndyo9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+client = MongoClient('mongodb+srv://rco90rc:12345@cluster0.lpndyo9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 db = client['Projeto2']
 colecao = db['rco90rc']
 
