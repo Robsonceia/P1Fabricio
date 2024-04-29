@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 
-mongoose.connect('mongodb+srv://rco90rc:1234@cluster0.lpndyo9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://rco90rc:12345@cluster0.lpndyo9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Conectado ao MongoDB'))
     .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 
